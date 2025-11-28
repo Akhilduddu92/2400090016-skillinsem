@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Course List Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        ul {
+            width: 250px;
+            padding: 0;
+        }
+        li {
+            list-style: none;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #e3e3e3;
+            border-radius: 5px;
+            cursor: grab;
+        }
+        #output {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Simple Course List (Drag & Drop)</h2>
+
+<ul id="courseList">
+    <li draggable="true">Mathematics</li>
+    <li draggable="true">Operating Systems</li>
+    <li draggable="true">Database Management</li>
+    <li draggable="true">Computer Networks</li>
+    <li draggable="true">Artificial Intelligence</li>
+</ul>
+
+<button onclick="showOrder()">Show Updated Order</button>
+
+<p id="output"></p>
+
+<script>
+    let draggedItem = null;
+
+    const listItems = document.querySelectorAll("#courseList li");
+
+    listItems.forEach(item => {
+        item.addEventListener("dragstart", function () {
+            draggedItem = item;
+        });
+
+        item.addEventListener("dragover", function (e) {
+            e.preventDefault();
+        });
+
+        item.addEventListener("drop", function () {
+            if (draggedItem !== this) {
+                let list = this.parentNode;
+                let draggedIndex = [...list.children].indexOf(draggedItem);
+                let dropIndex = [...list.children].indexOf(this);
+
+                if (draggedIndex < dropIndex) {
+                    list.insertBefore(draggedItem, this.nextSibling);
+                } else {
+                    list.insertBefore(draggedItem, this);
+                }
+            }
+        });
+    });
+
+    function showOrder() {
+        let items = document.querySelectorAll("#courseList li");
+        let order = [];
+        items.forEach(i => order.push(i.textContent));
+
+        document.getElementById("output").innerText =
+            "Updated Order: " + order.join(", ");
+    }
+</script>
+
+</body>
+</html>
